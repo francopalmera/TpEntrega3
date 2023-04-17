@@ -5,6 +5,11 @@ package com.mycompany.tp_entrega3;
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 
+/**
+ *
+ * @author Franco
+ */
+
 public class Equipo {
     private int idEquipo;
     private String nombre;

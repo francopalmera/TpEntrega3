@@ -5,6 +5,11 @@ package com.mycompany.tp_entrega3;
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 
+/**
+ *
+ * @author Franco
+ */
+
 import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;

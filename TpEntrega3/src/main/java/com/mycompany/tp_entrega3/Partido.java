@@ -4,6 +4,10 @@
  */
 package com.mycompany.tp_entrega3;
 
+/**
+ *
+ * @author Franco
+ */
 
 public class Partido {
     private int idPartido;

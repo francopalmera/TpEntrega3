@@ -6,8 +6,9 @@ package com.mycompany.tp_entrega3;
 
 /**
  *
- * @author ANITA
+ * @author Franco
  */
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
