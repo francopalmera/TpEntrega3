@@ -4,6 +4,11 @@
  */
 package com.mycompany.tp_entrega3;
 
+/**
+ *
+ * @author Franco
+ */
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
