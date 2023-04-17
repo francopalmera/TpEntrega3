@@ -24,17 +24,16 @@ import java.util.Scanner;
 public class ListaParticipantes {
     //atributos
     private List<Participante> participante;
-    private String participantesCSV;
-    //private ArrayList<ListaPronosticos> pronosticos;
-
-    public ListaParticipantes(List<Participante> participante, String participantesCSV) {
+    private String pronosticosDB;
+    
+    public ListaParticipantes(List<Participante> participante, String pronosticosDB) {
         this.participante = participante;
-        this.participantesCSV = participantesCSV;
+        this.pronosticosDB = pronosticosDB;
     }
     
         public ListaParticipantes() {
         this.participante = new ArrayList<Participante>();
-        this.participantesCSV = "participantes.csv";
+        this.pronosticosDB = "pronosticos.db";
     }
 
     public List<Participante> getParticipantes() {
@@ -45,12 +44,12 @@ public class ListaParticipantes {
         this.participante = participantes;
     }
     
-        public String getParticipantesCSV() {
-        return participantesCSV;
+        public String getPronosticosDB() {
+        return pronosticosDB;
     }
 
-    public void setParticipantesCSV(String participantesCSV) {
-        this.participantesCSV = participantesCSV;
+    public void setPronosticosDB(String pronosticosDB) {
+        this.pronosticosDB = pronosticosDB;
     }
 
     
@@ -61,7 +60,7 @@ public class ListaParticipantes {
         this.participante.remove(e);
     }
     
-    public Participante getParticipante (int idParticipante){
+    /*public Participante getParticipante (int idParticipante){
         Participante encontrado = null;
         for (Participante eq : this.getParticipantes()) {
             if (eq.getIdParticipante() == idParticipante){
@@ -71,7 +70,7 @@ public class ListaParticipantes {
             }
         }
         return encontrado;
-    }
+    }*/
 
     @Override
     public String toString() {
@@ -87,7 +86,7 @@ public class ListaParticipantes {
     }
     
     // cargar desde el archivo
-        public void cargarDeArchivo()  {
+    public void cargarDeArchivo()  {
               
         
         try { 
@@ -107,8 +106,6 @@ public class ListaParticipantes {
                         
                 );
                 this.addParticipante(p);
-               
-                                
                 
             }
             con.close();
@@ -118,12 +115,13 @@ public class ListaParticipantes {
         }
 
     }
-
-   
-
-   
-
     
+    public void calcularPuntajes() {
+        for (Participante participante : participante) {
+            participante.cargarPronosticos();
+        }
+    }  
+
 }
     
 

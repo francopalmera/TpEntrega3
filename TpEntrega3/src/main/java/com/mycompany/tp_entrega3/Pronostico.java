@@ -23,16 +23,6 @@ public class Pronostico {
         this.resultado = resultado;
     }
 
-    public int puntos() {
-        if (partido.resultado(equipo) == resultado) {
-            return 3;
-        } else if (resultado == "E" && partido.resultado(equipo) == "E") {
-            return 1;
-        } else {
-            return 0;
-        }
-    }
-
     public int getIdPronostico() {
         return idPronostico;
     }
@@ -63,6 +53,16 @@ public class Pronostico {
 
     public void setResultado(String resultado) {
         this.resultado = resultado;
+    }
+    
+    public int puntos() {
+        if (partido.resultado(equipo) == resultado) {
+            return 3;
+        } else if (resultado == "E" && partido.resultado(equipo) == "E") {
+            return 1;
+        } else {
+            return 0;
+        }
     }
 
     
