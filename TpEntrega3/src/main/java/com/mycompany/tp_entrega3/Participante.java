@@ -72,9 +72,9 @@ public class Participante {
 
     @Override
     public String toString() {
-        return "\n" + "idParticipante=" + idParticipante + "   ||  nombre=" + nombre 
-                + "\n" + pronosticos  
-                + "\n" + "PUNTAJE OBTENIDO: " + getPuntaje() 
+        return "\n" + "idParticipante: " + idParticipante + "   ||  Nombre: " + nombre + "   ||   PUNTAJE OBTENIDO: " + getPuntaje() 
+                + "\n \n" + pronosticos  
+                
                 + "\n" 
                 + "=============================***============================="
                 + "\n"

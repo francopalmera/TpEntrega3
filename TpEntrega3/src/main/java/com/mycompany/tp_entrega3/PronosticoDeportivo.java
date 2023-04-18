@@ -4,6 +4,9 @@
  */
 package com.mycompany.tp_entrega3;
 
+import java.util.Collections;
+import java.util.Comparator;
+
 /**
  *
  * @author ANITA
@@ -38,7 +41,20 @@ public class PronosticoDeportivo {
         
         System.out.println(" " + participantes.listar());
         
-        // agregar y/o modificar el codigo que quieran
+        Collections.sort(participantes.getParticipantes(), new Comparator<Participante>() {
+            @Override
+            public int compare(Participante p1, Participante p2) {
+                return p2.getPuntaje() - p1.getPuntaje();
+            }
+        });
+        System.out.println("\n \n Ranking:");
+        for (int i = 0; i < participantes.getParticipantes().size(); i++) {
+            Participante p = participantes.getParticipantes().get(i);
+            System.out.println((i + 1) + ". " + p.getNombre() + ": " + p.getPuntaje() + " puntos");
+        }
+        System.out.println("\n \n \n");
+        System.out.println("EL GANADOR ES: " + participantes.getParticipantes().get(0).getNombre());
+    }
         
         
         
