@@ -4,120 +4,159 @@
  */
 package com.mycompany.tp_entrega3;
 
+import java.sql.*;
+import java.util.List;
+import java.util.ArrayList;
 /**
  *
- * @author Franco
+ * @author ANITA
  */
-
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
-import java.sql.*;
-
-
 public class ListaPronosticos {
-    private ArrayList<Pronostico> pronosticos;
-    
-    public ListaPronosticos() {
-        pronosticos = new ArrayList<>();
+
+    // atributo
+    private List<Pronostico> pronosticos;
+    private String pronosticosCSV;
+
+    public ListaPronosticos(List<Pronostico> pronosticos, String pronosticosCSV) {
+        this.pronosticos = pronosticos;
+        this.pronosticosCSV = pronosticosCSV;
     }
-    
-    public ArrayList<Pronostico> getPronosticos() {
+
+    public ListaPronosticos() {
+        this.pronosticos = new ArrayList<Pronostico>();
+        this.pronosticosCSV = "pronosticos.csv";
+    }
+
+    public List<Pronostico> getPronosticos() {
         return pronosticos;
     }
-    
-    public void setPronosticos(ArrayList<Pronostico> pronosticos) {
+
+    public void setPronosticos(List<Pronostico> pronosticos) {
         this.pronosticos = pronosticos;
     }
-    
-    public void agregarPronostico(Pronostico p) {
-        pronosticos.add(p);
+
+    public String getPronosticosCSV() {
+        return pronosticosCSV;
     }
-    
-    public void cargarDeArchivo() {
- 
-    try {
-        
-        ListaParticipantes participantes = new ListaParticipantes();
-        ListaPartidos partidos = new ListaPartidos();
-        ListaEquipos equipos = new ListaEquipos();
-        Connection con = DriverManager.getConnection("jdbc:sqlite:pronosticos.db");
-        Statement consulta = con.createStatement();
-        ResultSet rs = consulta.executeQuery("SELECT * FROM pronosticos");
 
-        while (rs.next()) {
-            int idPronostico = rs.getInt("idPronostico");
-            int idParticipante = rs.getInt("idParticipante");
-            int idPartido = rs.getInt("idPartido");
-            int idEquipo = rs.getInt("idEquipo");
-            String resultado = rs.getString("resultado");
-
-            // Buscamos el participante correspondiente
-            Participante participante = null;
-            for (Participante p : participantes.getParticipantes()) {
-                if (p.getIdParticipante() == idParticipante) {
-                    participante = p;
-                    break;
-                }
-            }
-
-            // Buscamos el partido correspondiente
-            Partido partido = null;
-            for (Partido p : partidos.getPartidos()) {
-                if (p.getIdPartido() == idPartido) {
-                    partido = p;
-                    break;
-                }
-            }
-
-            // Buscamos el equipo correspondiente
-            Equipo equipo = null;
-            for (Equipo e : equipos.getEquipos()) {
-                if (e.getIdEquipo() == idEquipo) {
-                    equipo = e;
-                    break;
-                }
-            }
-
-            // Creamos el pronóstico y lo agregamos a la lista
-            Pronostico pronostico = new Pronostico(idPronostico, equipo, partido, resultado);
-            pronosticos.add(pronostico);
-        }
-
-        
-        con.close();
-    } catch (SQLException e) {
-        System.out.println("Error al cargar los pronósticos: " + e.getMessage());
+    public void setPronosticosCSV(String pronosticosCSV) {
+        this.pronosticosCSV = pronosticosCSV;
     }
-}
 
-
-    
-    public int getPuntaje() {
-        int puntajeTotal = 0;
-        for (Pronostico p : pronosticos) {
-            puntajeTotal += p.puntos();
-        }
-        return puntajeTotal;
+    // add y remove elementos
+    public void addPronostico(Pronostico p) {
+        this.pronosticos.add(p);
     }
-    
+
+    public void removePronostico(Pronostico p) {
+        this.pronosticos.remove(p);
+    }
+
     @Override
     public String toString() {
-        String s = "";
-        for (Pronostico p : pronosticos) {
-            s += p.toString() + "\n";
+        return "" + pronosticos ;
+    }
+
+    public String listar() {
+        String lista = "";
+        for (Pronostico pronostico : pronosticos) {
+            lista += "\n" + pronostico;
         }
-        return s;
+        return lista;
+    }
+
+    // Cargar desde el archivo, filtrando solamente aquellos pronósticos
+    // cuyo idParticipante coincide con el indicado
+    // De esa forma todos los pronósticos de la lista pertenecen al mismo participante.
+    public void cargarDeArchivo(
+            int idParticipante, // id del participante que realizó el pronóstico
+            ListaEquipos listaequipos, // lista de equipos
+            ListaPartidos listapartidos // lista de partidos
+    ) {
+        
+
+        try {
+            Connection con;
+            con = DriverManager.getConnection("jdbc:sqlite:pronosticos.db");
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM pronosticos");
+
+            while (rs.next()) {
+                
+                // graba el equipo en memoria
+                //convertir un string a un entero;
+                int readidPronostico = rs.getInt("idPronostico");
+                int readidParticipante = rs.getInt("idParticipante");
+                int readidPartido = rs.getInt("idPartido");
+                int readidEquipo = rs.getInt("idEquipo");
+                char readResultado = rs.getString("resultado").charAt(0);     // El primer caracter es una comilla delimitadora de campo
+                // Si coincide el idParticipante con el que estoy queriendo cargar,
+                // sigo, si no, salteo el registro y voy al siguiente
+                if (readidParticipante == idParticipante) {
+                    // Obtener los objetos que necesito para el constructor
+                    Partido partido = listapartidos.getPartido(readidPartido);
+                    Equipo equipo = listaequipos.getEquipo(readidEquipo);
+                    // crea el objeto en memoria
+                    Pronostico pronostico = new Pronostico(
+                            readidPronostico, // El id leido del archivo
+                            equipo, // El Equipo que obtuvimos de la lista
+                            partido, // El Partido que obtuvimos de la lista
+                            readResultado // El resultado que leimos del archivo
+                            
+                    );
+
+                    // llama al metodo add para grabar el equipo en la lista en memoria
+                    this.addPronostico(pronostico);
+                }
+            }
+            con.close();
+        } catch (SQLException e) {
+            System.out.println("Mensaje: " + e.getMessage());
+        }
+    }
+        
+    public void cargarDeArchivoTodos(
+            ListaEquipos listaequipos, // lista de equipos
+            ListaPartidos listapartidos // lista de partidos
+    ) {
+        
+        try {
+            Connection con;
+            con = DriverManager.getConnection("jdbc.sqlite:pronosticos.db");
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM pronosticos");
+        
+            while (rs.next()) {
+                
+                // graba el equipo en memoria
+                //convertir un string a un entero;
+                int readidPronostico = rs.getInt("idPronostico");
+                int readidParticipante = rs.getInt("idParticipante");
+                int readidPartido = rs.getInt("idPartido");
+                int readidEquipo = rs.getInt("idEquipo");
+                char readResultado = rs.getString("resultado").charAt(1);     // El primer caracter es una comilla delimitadora de campo
+                
+                // Obtener los objetos que necesito para el constructor
+                Partido partido = listapartidos.getPartido(readidPartido);
+                Equipo equipo = listaequipos.getEquipo(readidEquipo);
+                // crea el objeto en memoria
+                Pronostico pronostico = new Pronostico(
+                        readidPronostico, // El id leido del archivo
+                        equipo, // El Equipo que obtuvimos de la lista
+                        partido, // El Partido que obtuvimos de la lista
+                        readResultado, // El resultado que leimos del archivo,
+                        readidParticipante
+                );
+
+                // llama al metodo add para grabar el equipo en la lista en memoria
+                this.addPronostico(pronostico);
+
+            }
+            con.close();
+            //closes the scanner
+        } catch (SQLException e) {
+            System.out.println("Mensaje: " + e.getMessage());
+        }   
     }
 }
 
-    
-   
-
-   
-
-
-    
-    

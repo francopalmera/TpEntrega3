@@ -1,63 +1,46 @@
-
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
 package com.mycompany.tp_entrega3;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Random;
 /**
  *
- * @author Franco
+ * @author ANITA
  */
-
-
 public class PronosticoDeportivo {
+    private ListaEquipos equipos;
+    private ListaPartidos partidos;
+    private ListaParticipantes participantes;
+    private ListaPronosticos pronosticos;
 
-private ListaParticipantes participantes;
-private ListaPartidos partidos;
+    public PronosticoDeportivo() {
+        equipos = new ListaEquipos();
+        partidos = new ListaPartidos();
+        participantes = new ListaParticipantes();
+        pronosticos = new ListaPronosticos();
+    }
 
-public PronosticoDeportivo() {
-    participantes = new ListaParticipantes();
-    partidos = new ListaPartidos();
-}
+    public void play(){
+        // cargar y listar los equipos  
+        equipos.cargarDeArchivo();
+        //System.out.println("Los equipos cargados son: " + equipos.listar());
+        
+        partidos.cargarDeArchivo(equipos);
+       // System.out.println("Los partidos cargados son: " + partidos.listar());
 
-public void play() {
-    // Cargar participantes y partidos desde archivos
-    participantes.cargarDeArchivo();
-    partidos.cargarDeArchivo();
-    
-    // Cargar pronósticos de cada participante desde archivo
-    for (Participante p : participantes.getParticipantes()) {
-        p.cargarPronosticos();
-    }
-    
-    // Calcular puntajes para cada pronóstico
-    for (Pronostico pr : getAllPronosticos()) {
-        pr.puntos();
-    }
-    
-    // Ordenar participantes por puntaje
-    //Collections.sort(participantes.getParticipantes());
-    
-    // Mostrar listado de participantes y puntajes
-    for (Participante p : participantes.getParticipantes()) {
-        System.out.println(p.getNombre() + " - " + p.getPuntaje() + " puntos");
-    }
-    
-    // Mostrar al ganador
-    System.out.println("El ganador es " + participantes.getParticipantes().get(0).getNombre());
-}
-
-private ArrayList<Pronostico> getAllPronosticos() {
-    ArrayList<Pronostico> allPronosticos = new ArrayList<>();
-    for (Participante p : participantes.getParticipantes()) {
-        allPronosticos.addAll(p.getPronosticos().getPronosticos());
-    }
-    return allPronosticos;
-}
+        participantes.cargarDeArchivo();
+        // Una vez cargados los participantes, para cada uno de ellos
+        // cargar sus pronósticos
+        for (Participante p : participantes.getParticipantes()) {
+            p.cargarPronosticos(equipos, partidos);
+        }
+        
+        System.out.println(" " + participantes.listar());
+        
+        // agregar y/o modificar el codigo que quieran
+        
+        
+        
+    }    
 }

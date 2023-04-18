@@ -6,28 +6,34 @@ package com.mycompany.tp_entrega3;
 
 /**
  *
- * @author Franco
+ * @author ANITA
  */
-
-
 public class Pronostico {
-    private int idPronostico;
+    
+    private Integer idPronostico;
     private Equipo equipo;
     private Partido partido;
-    private String resultado;
+    private char resultado;
 
-    public Pronostico(int idPronostico, Equipo equipo, Partido partido, String resultado) {
+    public Pronostico(Integer idPronostico, Equipo equipo, Partido partido, char resultado) {
         this.idPronostico = idPronostico;
         this.equipo = equipo;
         this.partido = partido;
         this.resultado = resultado;
     }
 
-    public int getIdPronostico() {
+    public Pronostico(int readidPronostico, Equipo equipo1, Partido partido1, char readResultado, int readidParticipante) {
+        this.idPronostico = null;
+        this.equipo = null;
+        this.partido = null;
+        this.resultado = 0;
+    }
+
+    public Integer getIdPronostico() {
         return idPronostico;
     }
 
-    public void setIdPronostico(int idPronostico) {
+    public void setIdPronostico(Integer idPronostico) {
         this.idPronostico = idPronostico;
     }
 
@@ -47,23 +53,32 @@ public class Pronostico {
         this.partido = partido;
     }
 
-    public String getResultado() {
+    public char getResultado() {
         return resultado;
     }
 
-    public void setResultado(String resultado) {
+    public void setResultado(char resultado) {
         this.resultado = resultado;
     }
+
+    @Override
+    public String toString() {
+        String res = "\nApuesto a que en el partido:\n"+
+                this.getPartido()+
+                this.getEquipo().getNombre()+" obtiene el siguiente Resultado: "+
+                this.getResultado()+"\n";
+        return res;
+    }
     
-     
     public int puntos() {
-        String resultadoPartido = partido.resultado(equipo);
-        if (resultado == resultadoPartido) {
+        if (partido.getResultado(equipo) == resultado) {
+            return 3;
+        } else if (resultado == 'E' && partido.getResultado(equipo) == 'E') {
             return 1;
         } else {
             return 0;
         }
     }
-
+    
     
 }

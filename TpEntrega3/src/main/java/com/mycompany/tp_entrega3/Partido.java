@@ -6,55 +6,53 @@ package com.mycompany.tp_entrega3;
 
 /**
  *
- * @author Franco
+ * @author ANITA
  */
-
 public class Partido {
     private int idPartido;
-    private int idEquipo1;
-    private int idEquipo2;
+    private Equipo equipo1;
+    private Equipo equipo2;
     private int golesEquipo1;
     private int golesEquipo2;
 
-    
-    
-    public Partido(int idPartido, int idEquipo1, int idEquipo2, int golesEquipo1, int golesEquipo2) {
+    public Partido(int idPartido, Equipo equipo1, Equipo equipo2, int golesEquipo1, int golesEquipo2) {
         this.idPartido = idPartido;
-        this.idEquipo1 = idEquipo1;
-        this.idEquipo2 = idEquipo2;
+        this.equipo1 = equipo1;
+        this.equipo2 = equipo2;
         this.golesEquipo1 = golesEquipo1;
         this.golesEquipo2 = golesEquipo2;
     }
-    
+
     public Partido() {
-        this.idEquipo1 = idEquipo1;
-        this.idEquipo2 = idEquipo2;
-        this.golesEquipo1 = golesEquipo1;
-        this.golesEquipo2 = golesEquipo2;
+        this.idPartido = 0;
+        this.equipo1 = null;
+        this.equipo2 = null;
+        this.golesEquipo1 = 0;
+        this.golesEquipo2 = 0;
     }
-    
-    public int getIdPartido(){
+
+    public int getIdPartido() {
         return idPartido;
     }
-    
-    public void setIdPartido(int idPartido){
+
+    public void setIdPartido(int idPartido) {
         this.idPartido = idPartido;
     }
 
-    public int getIdEquipo1() {
-        return idEquipo1;
+    public Equipo getEquipo1() {
+        return equipo1;
     }
 
-    public void setIdEquipo1(int idEquipo1) {
-        this.idEquipo1 = idEquipo1;
+    public void setEquipo1(Equipo equipo1) {
+        this.equipo1 = equipo1;
     }
 
-    public int getIdEquipo2() {
-        return idEquipo2;
+    public Equipo getEquipo2() {
+        return equipo2;
     }
 
-    public void setIdEquipo2(int idEquipo2) {
-        this.idEquipo2 = idEquipo2;
+    public void setEquipo2(Equipo equipo2) {
+        this.equipo2 = equipo2;
     }
 
     public int getGolesEquipo1() {
@@ -69,29 +67,40 @@ public class Partido {
         return golesEquipo2;
     }
 
-    public void setGolesEquipo2(int golesEquipo2) {
+    public void setGolesEquipo2(int golesEquipo2) {             
         this.golesEquipo2 = golesEquipo2;
     }
-    
+
+    @Override
     public String toString() {
-        String res = 
-                "-----------------------------------------\n"+
-                this.idEquipo1 +" vs. "+this.idEquipo2+"\n"+
-                "Resultado: "+this.golesEquipo1+ " a "+this.golesEquipo2+"\n"+
-                "-----------------------------------------\n";
-                
-        return res;
+        return  equipo1 + " " + golesEquipo1 + " " + "VS " + equipo2 + " " + golesEquipo2 + "\n";
     }
     
-      public String resultado(Equipo equipo) {
-        if (equipo.getIdEquipo() == idEquipo1 && golesEquipo1 > golesEquipo2) {
-            return "G";
-        } else if (equipo.getIdEquipo() == idEquipo2 && golesEquipo2 > golesEquipo1) {
-            return "G";
-        } else if (golesEquipo1 == golesEquipo2) {
-            return "E";
-        } else {
-            return "P";
-        }
+    
+    
+    
+public char getResultado (Equipo equipo) {
+        char resultado = 'X'; // POR DEFECTO NO SE SABE QUIEN GANO
+        
+        if (equipo.getNombre().equals(equipo1.getNombre())) {
+            if (this.golesEquipo1 > this.golesEquipo2) {
+                resultado = 'G';
+            } else if (this.golesEquipo1 < this.golesEquipo2) {
+                resultado = 'P';
+            } else {
+                resultado = 'E';
+            }
+        } else if (equipo.getNombre().equals(equipo2.getNombre())) {
+            if (this.golesEquipo2 > this.golesEquipo1) {
+                resultado = 'G';
+            } else if (this.golesEquipo2 < this.golesEquipo1) {
+                resultado = 'P';
+            } else {
+                resultado = 'E';
+            }
+        } 
+        return resultado;
     }
+    
+    
 }

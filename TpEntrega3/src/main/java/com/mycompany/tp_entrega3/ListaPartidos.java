@@ -1,111 +1,110 @@
-package com.mycompany.tp_entrega3;
-
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
+package com.mycompany.tp_entrega3;
 
+import java.util.List;
+import java.util.ArrayList;
+import java.sql.*;
 /**
  *
- * @author Franco
+ * @author ANITA
  */
-
-import java.io.File;
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
-
 public class ListaPartidos {
-    private List<Partido> partido;
-    private String partidosCSV;
-    
-    public ListaPartidos(List<Partido> partido, String partidosCSV) {
-        this.partido = partido;
-        this.partidosCSV = partidosCSV;
+    private List<Partido> partidos;
+    private String partidodb;
+
+    public ListaPartidos(List<Partido> partidos, String partidodb) {
+        this.partidos = partidos;
+        this.partidodb = partidodb;
     }
 
     public ListaPartidos() {
-        this.partido = new ArrayList<Partido>();
-        this.partidosCSV = "partidos.csv";
-    }
-    
-        public List<Partido> getPartidos() {
-        return this.partido;
-    }
-    
-    public void setPartidos(ArrayList<Partido> partidos){
-        this.partido = partidos;
-    }
-    
-    public String getPartidosCSV() {
-        return partidosCSV;
+        this.partidos = new ArrayList<Partido>();
+        this.partidodb = null;
     }
 
-    public void setPartidosCSV(String partidosCSV) {
-        this.partidosCSV = partidosCSV;
+    public List<Partido> getPartidos() {
+        return partidos;
     }
 
+    public void setPartidos(List<Partido> partidos) {
+        this.partidos = partidos;
+    }
+
+    public String getPartidodb() {
+        return partidodb;
+    }
+
+    public void setPartidodb(String partidodb) {
+        this.partidodb = partidodb;
+    }
     
-    public void addPartido(Partido e) {
-        this.partido.add(e);
-    }
-
-    public void removePartido(Partido e) {
-        this.partido.remove(e);
+    public Partido getPartido (int idPartido) {
+        // Defini un objeto de tipo Participante en dónde va a ir mi resultado
+        // Inicialmente es null, ya que no he encontrado el equipo que 
+        // buscaba todavía.
+        Partido encontrado = null;
+        // Recorro la lista de participantes que está cargada
+        for (Partido eq : this.getPartidos()) {
+            // Para cada equipo obtengo el valor del ID y lo comparo con el que
+            // estoy buscando
+            if (eq.getIdPartido() == idPartido) {
+                // Si lo encuentro (son iguales) lo asigno como valor de encontrado
+                encontrado = eq;
+                // Y hago un break para salir del ciclo ya que no hace falta seguir buscando
+                break;
+            }
+        }
+        // Una vez fuera del ciclo retorno el Participante, pueden pasar dos cosas:
+        // 1- Lo encontré en el ciclo, entonces encontrado tiene el objeto encontrado
+        // 2- No lo encontré en el ciclo, entonces conserva el valor null del principio
+        return encontrado;
     }
 
     @Override
     public String toString() {
-        return "ListaPartidos{" + "partido=" + partido + '}';
+        return "";
     }
-
+    
     public String listar() {
         String lista = "";
-        for (Partido partido: partido) {
+        for (Partido partido: partidos) {
             lista += "\n" + partido;
         }           
         return lista;
     }
     
-        public void cargarDeArchivo()  {
-              
-        
-        try { 
-            Connection con = DriverManager.getConnection("jdbc:sqlite:pronosticos.db");  
+    public void cargarDeArchivo(ListaEquipos listaequipos){
+        try {
+            Connection con;
+            con = DriverManager.getConnection("jdbc:sqlite:pronosticos.db");
             Statement stmt = con.createStatement();
-            
             String sql = "SELECT idPartido, idEquipo1, idEquipo2, golesEquipo1, golesEquipo2 FROM partidos";
+            ResultSet rs = stmt.executeQuery(sql);
             
-            ResultSet rs = stmt.executeQuery(sql);  
- 
-            
-            while (rs.next()) {
+            while (rs.next()){
+                Integer idPartido = rs.getInt("idPartido");
+                Integer readidEquipo1 = rs.getInt("idEquipo1");
+                Integer readidEquipo2 = rs.getInt ("idEquipo2");
+                Integer golesEquipo1 = rs.getInt("golesEquipo1");
+                Integer golesEquipo2 = rs.getInt("golesEquipo2");
                 
-                Partido p = new Partido(
-                       rs.getInt("idPartido"),
-                       rs.getInt("idEquipo1"),
-                       rs.getInt("idEquipo2"),
-                       rs.getInt("golesEquipo1"),
-                       rs.getInt("golesEquipo2")
-                );
-                this.addPartido(p);
-                                
-                
+                Equipo equipo1 = listaequipos.getEquipo(readidEquipo1);
+                Equipo equipo2 = listaequipos.getEquipo(readidEquipo2);
+                Partido partido = new Partido(idPartido, equipo1, equipo2, golesEquipo1, golesEquipo2);
+                this.partidos.add(partido);
             }
             con.close();
             
-        } catch (SQLException ex) {
-                System.out.println("Mensaje: " + ex.getMessage());
         }
-
+        catch (SQLException e) {
+            System.out.println("Error al cargar los partidos desde la base de datos: " + e.getMessage());
+        }
+            
     }
-
     
-
+    
+    
 }
