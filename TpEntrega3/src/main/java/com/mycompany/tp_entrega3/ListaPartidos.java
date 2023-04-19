@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.sql.*;
 /**
  *
- * @author ANITA
+ * @author Franco
  */
 public class ListaPartidos {
     private List<Partido> partidos;

@@ -6,7 +6,7 @@ package com.mycompany.tp_entrega3;
 
 /**
  *
- * @author ANITA
+ * @author Franco
  */
 public class Equipo {
     private Integer idEquipo;

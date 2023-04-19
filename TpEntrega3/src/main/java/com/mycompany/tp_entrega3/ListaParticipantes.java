@@ -10,7 +10,7 @@ import java.sql.*;
 
 /**
  *
- * @author ANITA
+ * @author Franco
  */
 public class ListaParticipantes {
     // atributo

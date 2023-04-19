@@ -9,7 +9,7 @@ import java.util.Comparator;
 
 /**
  *
- * @author ANITA
+ * @author Franco
  */
 public class PronosticoDeportivo {
     private ListaEquipos equipos;

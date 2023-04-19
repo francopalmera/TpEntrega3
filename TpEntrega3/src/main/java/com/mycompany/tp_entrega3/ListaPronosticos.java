@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.ArrayList;
 /**
  *
- * @author ANITA
+ * @author Franco
  */
 public class ListaPronosticos {
 
