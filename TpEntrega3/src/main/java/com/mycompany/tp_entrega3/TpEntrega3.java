@@ -13,7 +13,7 @@ public class TpEntrega3 {
 
     public static PronosticoDeportivo PRODE;
     
-    //La base de datos pronosticos.db fue modificada
+    //La base de datos pronosticos.db fue modificada.
    
     public static void main(String[] args) {
         System.out.println ("Sistema de simulación de pronósticos deportivos.");
