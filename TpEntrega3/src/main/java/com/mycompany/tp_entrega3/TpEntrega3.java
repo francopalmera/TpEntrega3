@@ -6,13 +6,14 @@ package com.mycompany.tp_entrega3;
 
 /**
  *
- * @author ANITA
+ * @author Franco
  */
 
-public class TP_Entrega3 {
+public class TpEntrega3 {
 
     public static PronosticoDeportivo PRODE;
     
+    //La base de datos pronosticos.db fue modificada.
    
     public static void main(String[] args) {
         System.out.println ("Sistema de simulación de pronósticos deportivos.");
